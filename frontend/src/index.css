@@ -23,10 +23,19 @@ body {
   margin: 0 0 10px 0;
 }
 
-.delete-btn {
+.delete-btn,
+.edit-btn {
   position: absolute;
   top: 20px;
+  padding: 4px 10px;
+}
+
+.delete-btn {
   right: 20px;
+}
+
+.edit-btn {
+  right: 90px;
 }
 
 form.create {
@@ -60,4 +69,9 @@ div.error {
   color: #eb4d4d;
   border-radius: 4px;
   margin-top: 10px;
+}
+
+form.create input.error {
+  border: 1px solid #eb4d4d;
+  background: #ffefef;
 }

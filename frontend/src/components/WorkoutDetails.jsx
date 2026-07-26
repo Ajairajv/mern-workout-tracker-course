@@ -1,7 +1,13 @@
+import { useState } from 'react'
+import { formatDistanceToNow } from 'date-fns'
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 
 const WorkoutDetails = ({ workout }) => {
   const { dispatch } = useWorkoutsContext()
+  const [isEditing, setIsEditing] = useState(false)
+  const [title, setTitle] = useState(workout.title)
+  const [load, setLoad] = useState(workout.load)
+  const [reps, setReps] = useState(workout.reps)
 
   const handleDelete = async () => {
     const response = await fetch('http://localhost:4000/api/workouts/' + workout._id, {
@@ -14,12 +20,41 @@ const WorkoutDetails = ({ workout }) => {
     }
   }
 
+  const handleUpdate = async (e) => {
+    e.preventDefault()
+
+    const response = await fetch('http://localhost:4000/api/workouts/' + workout._id, {
+      method: 'PATCH',
+      body: JSON.stringify({ title, load, reps }),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    const json = await response.json()
+
+    if (response.ok) {
+      dispatch({ type: 'UPDATE_WORKOUT', payload: json })
+      setIsEditing(false)
+    }
+  }
+
+  if (isEditing) {
+    return (
+      <form className="workout-details" onSubmit={handleUpdate}>
+        <input value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input type="number" value={load} onChange={(e) => setLoad(e.target.value)} />
+        <input type="number" value={reps} onChange={(e) => setReps(e.target.value)} />
+        <button type="submit">Save</button>
+        <button type="button" onClick={() => setIsEditing(false)}>Cancel</button>
+      </form>
+    )
+  }
+
   return (
     <div className="workout-details">
       <h4>{workout.title}</h4>
       <p><strong>Load (kg): </strong>{workout.load}</p>
       <p><strong>Reps: </strong>{workout.reps}</p>
-      <p>{workout.createdAt}</p>
+      <p>{formatDistanceToNow(new Date(workout.createdAt), { addSuffix: true })}</p>
+      <button className="edit-btn" onClick={() => setIsEditing(true)}>Edit</button>
       <button className="delete-btn" onClick={handleDelete}>Delete</button>
     </div>
   )
