@@ -6,6 +6,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const workoutRoutes = require('./routes/workouts')
+const userRoutes = require('./routes/user')
 
 // Node's built-in DNS resolver sometimes can't reach the SRV record for
 // mongodb+srv:// URIs on this network even though the OS resolver can.
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use('/api/workouts',workoutRoutes)
+app.use('/api/user', userRoutes)
 
 
 // app.get('/',(request,response)=>{

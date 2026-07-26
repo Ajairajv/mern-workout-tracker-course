@@ -1,34 +1,36 @@
-import { useEffect } from 'react'
-import { useWorkoutsContext } from './hooks/useWorkoutsContext'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useAuthContext } from './hooks/useAuthContext'
 
-import WorkoutDetails from './components/WorkoutDetails'
-import WorkoutForm from './components/WorkoutForm'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
+import Navbar from './components/Navbar'
 
 const App = () => {
-  const { workouts, dispatch } = useWorkoutsContext()
-
-  useEffect(() => {
-    const fetchWorkouts = async () => {
-      const response = await fetch('http://localhost:4000/api/workouts')
-      const json = await response.json()
-
-      if (response.ok) {
-        dispatch({ type: 'SET_WORKOUTS', payload: json })
-      }
-    }
-
-    fetchWorkouts()
-  }, [dispatch])
+  const { user } = useAuthContext()
 
   return (
-    <div className="App">
-      <div className="workouts">
-        {workouts && workouts.map((workout) => (
-          <WorkoutDetails key={workout._id} workout={workout} />
-        ))}
+    <BrowserRouter>
+      <div className="App">
+        <Navbar />
+        <div className="pages">
+          <Routes>
+            <Route
+              path="/"
+              element={user ? <Home /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/login"
+              element={!user ? <Login /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/signup"
+              element={!user ? <Signup /> : <Navigate to="/" />}
+            />
+          </Routes>
+        </div>
       </div>
-      <WorkoutForm />
-    </div>
+    </BrowserRouter>
   )
 }
 

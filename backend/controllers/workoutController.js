@@ -1,13 +1,14 @@
 const mongoose = require('mongoose')
 const Workout = require('../models/workoutModel')
 
-// GET all workouts
+// GET all workouts (only this user's)
 const getWorkouts = async (req, res) => {
-  const workouts = await Workout.find({}).sort({ createdAt: -1 })
+  const user_id = req.user._id
+  const workouts = await Workout.find({ user_id }).sort({ createdAt: -1 })
   res.status(200).json(workouts)
 }
 
-// GET a single workout
+// GET a single workout (only if it belongs to this user)
 const getWorkout = async (req, res) => {
   const { id } = req.params
 
@@ -15,7 +16,7 @@ const getWorkout = async (req, res) => {
     return res.status(404).json({ error: 'No such workout' })
   }
 
-  const workout = await Workout.findById(id)
+  const workout = await Workout.findOne({ _id: id, user_id: req.user._id })
 
   if (!workout) {
     return res.status(404).json({ error: 'No such workout' })
@@ -24,7 +25,7 @@ const getWorkout = async (req, res) => {
   res.status(200).json(workout)
 }
 
-// CREATE a new workout
+// CREATE a new workout, owned by this user
 const createWorkout = async (req, res) => {
   const { title, load, reps } = req.body
 
@@ -38,14 +39,15 @@ const createWorkout = async (req, res) => {
   }
 
   try {
-    const workout = await Workout.create({ title, load, reps })
+    const user_id = req.user._id
+    const workout = await Workout.create({ title, load, reps, user_id })
     res.status(201).json(workout)
   } catch (error) {
     res.status(400).json({ error: error.message })
   }
 }
 
-// DELETE a workout
+// DELETE a workout (only if it belongs to this user)
 const deleteWorkout = async (req, res) => {
   const { id } = req.params
 
@@ -53,7 +55,7 @@ const deleteWorkout = async (req, res) => {
     return res.status(404).json({ error: 'No such workout' })
   }
 
-  const workout = await Workout.findOneAndDelete({ _id: id })
+  const workout = await Workout.findOneAndDelete({ _id: id, user_id: req.user._id })
 
   if (!workout) {
     return res.status(404).json({ error: 'No such workout' })
@@ -62,7 +64,7 @@ const deleteWorkout = async (req, res) => {
   res.status(200).json(workout)
 }
 
-// UPDATE a workout
+// UPDATE a workout (only if it belongs to this user)
 const updateWorkout = async (req, res) => {
   const { id } = req.params
 
@@ -71,7 +73,7 @@ const updateWorkout = async (req, res) => {
   }
 
   const workout = await Workout.findOneAndUpdate(
-    { _id: id },
+    { _id: id, user_id: req.user._id },
     { ...req.body },
     { new: true }
   )

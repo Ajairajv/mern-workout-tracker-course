@@ -1,17 +1,22 @@
 import { useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
+import { useAuthContext } from '../hooks/useAuthContext'
 
 const WorkoutDetails = ({ workout }) => {
   const { dispatch } = useWorkoutsContext()
+  const { user } = useAuthContext()
   const [isEditing, setIsEditing] = useState(false)
   const [title, setTitle] = useState(workout.title)
   const [load, setLoad] = useState(workout.load)
   const [reps, setReps] = useState(workout.reps)
 
   const handleDelete = async () => {
+    if (!user) return
+
     const response = await fetch('http://localhost:4000/api/workouts/' + workout._id, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${user.token}` }
     })
     const json = await response.json()
 
@@ -23,10 +28,15 @@ const WorkoutDetails = ({ workout }) => {
   const handleUpdate = async (e) => {
     e.preventDefault()
 
+    if (!user) return
+
     const response = await fetch('http://localhost:4000/api/workouts/' + workout._id, {
       method: 'PATCH',
       body: JSON.stringify({ title, load, reps }),
-      headers: { 'Content-Type': 'application/json' }
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
+      }
     })
     const json = await response.json()
 

@@ -12,9 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.8.0"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^9.8.0",
+    "validator": "^13.12.0"
   }
 }
