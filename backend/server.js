@@ -4,6 +4,7 @@ require('dotenv').config({ quiet: true })
 const dns = require('dns')
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
 const workoutRoutes = require('./routes/workouts')
 
 // Node's built-in DNS resolver sometimes can't reach the SRV record for
@@ -15,6 +16,7 @@ dns.setServers(['8.8.8.8', '1.1.1.1'])
 const app = express()
 
 // middleware
+app.use(cors())
 app.use(express.json())
 app.use((req, res, next) => {
   console.log(req.path,req.method)

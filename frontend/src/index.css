@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f7f7f7;
+}
+
+.App {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.workout-details {
+  background: #fff;
+  border-radius: 6px;
+  margin: 20px auto;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.workout-details h4 {
+  margin: 0 0 10px 0;
+}
