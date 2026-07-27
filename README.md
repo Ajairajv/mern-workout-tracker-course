@@ -1,5 +1,7 @@
 # MERN Workout Tracker Course
 
+> **New here?** Start with the full setup guide on [`main`](https://github.com/Ajairajv/mern-workout-tracker-course/blob/main/docs/getting-started.md): [Prerequisites](https://github.com/Ajairajv/mern-workout-tracker-course/blob/main/docs/prerequisites.md) → [Getting Started](https://github.com/Ajairajv/mern-workout-tracker-course/blob/main/docs/getting-started.md) → [Lesson 0 guide](https://github.com/Ajairajv/mern-workout-tracker-course/blob/main/docs/lessons/lesson-0.md).
+
 This repository hosts a beginner-friendly, live-coding MERN course built around a **Workout Tracker** app.
 Students record workouts (title, reps, load/weight) and, by the end of the course, sign up, log in, and only
 see their own workouts.
